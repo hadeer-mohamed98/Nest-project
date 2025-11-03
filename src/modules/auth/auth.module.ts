@@ -10,6 +10,6 @@ import { SecurityService } from 'src/common/services';
   imports: [ OtpModel],
   controllers: [AuthenticationController],
   providers: [AuthenticationService, OtpRepository, SecurityService],
-  exports: [],
+  exports: [AuthenticationService],
 })
 export class AuthenticationModule {}

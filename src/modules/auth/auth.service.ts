@@ -22,8 +22,6 @@ import {
 } from './dto/auth.dto';
 import { Types } from 'mongoose';
 import { SecurityService, TokenService } from 'src/common/services';
-import { sign } from 'jsonwebtoken';
-import { JwtService } from '@nestjs/jwt';
 import { HUserDocument } from 'src/DB';
 
 @Injectable()

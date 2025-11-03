@@ -18,5 +18,5 @@ const tokenSchema = SchemaFactory.createForClass(Token);
 tokenSchema.index({ expiredAt: 1 }, { expireAfterSeconds: 0 });
 
 export const TokenModel = MongooseModule.forFeature([
-  { name: Token.name, schema: tokenSchema },
+  { name: "Token", schema: tokenSchema },
 ]);

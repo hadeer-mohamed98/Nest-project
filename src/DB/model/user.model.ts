@@ -112,7 +112,7 @@ userSchema.pre("save" , async function (next) {
 })
 
 export const UserModel = MongooseModule.forFeature([
-  { name: User.name, schema: userSchema },
+  { name: "User", schema: userSchema },
 ]);
 
 // export const UserModel = MongooseModule.forFeatureAsync([
