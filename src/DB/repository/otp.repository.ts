@@ -7,7 +7,7 @@ import { Model } from 'mongoose';
 @Injectable()
 export class OtpRepository extends DatabaseRepository<Otp> {
   constructor(
-    @InjectModel(Otp.name) protected override readonly model: Model<TDocument>,
+    @InjectModel("Otp") protected override readonly model: Model<TDocument>,
   ) {
     super(model);
   }

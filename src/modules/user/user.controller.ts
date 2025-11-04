@@ -16,8 +16,7 @@ export class UserController {
     @Headers() header: any,
     @User() user: HUserDocument,
   ): Observable<any> {
- 
-    return of([{message:"Done"}]).pipe(delay(200))
+    return of([{ message: 'Done' }]).pipe(delay(200));
   }
 
   @Get()

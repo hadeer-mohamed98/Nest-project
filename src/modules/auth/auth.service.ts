@@ -56,7 +56,7 @@ export class AuthenticationService {
       throw new ConflictException('Email already exist!');
     }
     const [user] = await this.userRepository.create({
-      data: [{ username, email, password: await generateHash(password) }],
+      data: [{ username, email, password }],
     });
     if (!user) {
       throw new BadRequestException(
@@ -100,8 +100,8 @@ export class AuthenticationService {
       throw new NotFoundException('fail to find matching account');
     }
     if (
-      !user.otp?.length &&
-      (await this.securityService.compareHash(code, user.otp[0].code))
+      !user.otp?.length ||
+      !(await this.securityService.compareHash(code, user.otp[0].code))
     ) {
       throw new BadRequestException('invalid otp');
     }
@@ -127,7 +127,7 @@ export class AuthenticationService {
       throw new NotFoundException('Fail to find matching account');
     }
     if (!(await this.securityService.compareHash(password, user.password))) {
-      throw new NotFoundException('Fail to find matching account');
+      throw new BadRequestException('userName or password not correct');
     }
    
 

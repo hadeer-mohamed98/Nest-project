@@ -50,5 +50,5 @@ otpSchema.post('save', async function (doc, next) {
 });
 
 export const OtpModel = MongooseModule.forFeature([
-  { name: Otp.name, schema: otpSchema },
+  { name: "Otp", schema: otpSchema },
 ]);

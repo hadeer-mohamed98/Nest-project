@@ -12,7 +12,6 @@ import {
   LoginBodyDto,
   ResendConfirmEmailDto,
   SignupBodyDto,
-  SignupQueryDto,
 } from './dto/auth.dto';
 import { LoginResponse } from './entities/auth.entity';
 
