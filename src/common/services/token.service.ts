@@ -96,7 +96,7 @@ export class TokenService {
     console.log(signatures);
     const jwtid = randomUUID();
     const access_token = await this.generateToken({
-      payload: { _id: user._id },
+      payload: { sub: user._id },
       options: {
         secret: signatures.access_signature,
         expiresIn: Number(process.env.ACCESS_TOKEN_EXPIRES_IN),
@@ -105,7 +105,7 @@ export class TokenService {
     });
 
     const refresh_token = await this.generateToken({
-      payload: { _id: user._id },
+      payload: { sub: user._id },
       options: {
         secret: signatures.refresh_signature,
         expiresIn: Number(process.env.REFRESH_TOKEN_EXPIRES_IN),
