@@ -92,6 +92,9 @@ export class User {
 
   @Virtual()
   otp:OtpDocument[]
+
+  @Prop({type:String})
+  profilePicture:string
 }
 
 export type HUserDocument = HydratedDocument<User>;

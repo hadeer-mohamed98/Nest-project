@@ -122,46 +122,50 @@ export class TokenService {
     authorization: string;
     tokenType?: TokenEnum;
   }): Promise<{ user: HUserDocument; decoded: JwtPayload }> => {
-   try {
-     const [bearerKey, token] = authorization.split(' ');
+    try {
+      const [bearerKey, token] = authorization.split(' ');
 
-    if (!bearerKey || !token) {
-      throw new UnauthorizedException('missing token parts');
-    }
-    const signatures = await this.getSignatures(
-      bearerKey as SignatureLevelEnum,
-    );
-    const decoded = await this.verifyToken({
-      token,
-      options: {
-        secret:
-          tokenType === TokenEnum.refresh
-            ? signatures.refresh_signature
-            : signatures.access_signature,
-      },
-    });
+      if (!bearerKey || !token) {
+        throw new UnauthorizedException('missing token parts');
+      }
+      const signatures = await this.getSignatures(
+        bearerKey as SignatureLevelEnum,
+      );
+      const decoded = await this.verifyToken({
+        token,
+        options: {
+          secret:
+            tokenType === TokenEnum.refresh
+              ? signatures.refresh_signature
+              : signatures.access_signature,
+        },
+      });
 
-    if (!decoded?.sub || !decoded.iat) {
-      throw new BadRequestException('invalid token payload');
-    }
-    if (await this.tokenRepository.findOne({ filter: { jti: decoded.jti } })) {
-      throw new UnauthorizedException('invalid or old login credentials');
-    }
-    const user = (await this.userRepository.findOne({
-      filter: { _id: decoded.sub },
-    })) as HUserDocument;
-    if (!user) {
-      throw new NotFoundException('not registered account');
-    }
+      if (!decoded?.sub || !decoded.iat) {
+        throw new BadRequestException('invalid token payload');
+      }
+      if (
+        await this.tokenRepository.findOne({ filter: { jti: decoded.jti } })
+      ) {
+        throw new UnauthorizedException('invalid or old login credentials');
+      }
+      const user = (await this.userRepository.findOne({
+        filter: { _id: decoded.sub },
+      })) as HUserDocument;
+      if (!user) {
+        throw new NotFoundException('not registered account');
+      }
 
-    if ((user.changeCredentialsTime?.getTime() || 0) > decoded.iat * 1000) {
-      throw new NotFoundException('invalid or old login credentials');
-    }
+      if ((user.changeCredentialsTime?.getTime() || 0) > decoded.iat * 1000) {
+        throw new NotFoundException('invalid or old login credentials');
+      }
 
-    return { user, decoded };
-   } catch (error) {
-    throw new InternalServerErrorException(error.message || "something went wrong")
-   }
+      return { user, decoded };
+    } catch (error) {
+      throw new InternalServerErrorException(
+        error.message || 'something went wrong',
+      );
+    }
   };
 
   createRevokeToken = async (decoded: JwtPayload): Promise<TokenDocument> => {
