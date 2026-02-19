@@ -10,28 +10,29 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { Auth, RoleEnum, StorageEnum, User } from 'src/common';
+import { Auth, RoleEnum, StorageEnum, successResponse, User } from 'src/common';
 import type { HUserDocument } from 'src/DB';
 import { PreferredLanguageInterceptor } from 'src/common/interceptors';
 import { delay, Observable, of } from 'rxjs';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { localFileUpload } from 'src/common/utils/multer/local.multer.options';
-import type { IMulterFile } from '../../common/interfaces';
+import type { IMulterFile, IResponse, IUser } from '../../common/interfaces';
 import { cloudFileUpload, fileValidation } from 'src/common/utils/multer';
+import { ProfileResponse } from './entities/user.entity';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @UseInterceptors(PreferredLanguageInterceptor)
-  @Auth([RoleEnum.admin, RoleEnum.user])
-  @Get()
-  profile(
-    @Headers() header: any,
-    @User() user: HUserDocument,
-  ): Observable<any> {
-    return of([{ message: 'Done' }]).pipe(delay(200));
-  }
+  // @UseInterceptors(PreferredLanguageInterceptor)
+  // @Auth([RoleEnum.admin, RoleEnum.user])
+  // @Get()
+  // profile(
+  //   @Headers() header: any,
+  //   @User() user: HUserDocument,
+  // ): Observable<any> {
+  //   return of([{ message: 'Done' }]).pipe(delay(200));
+  // }
 
   @UseInterceptors(
     FileInterceptor(
@@ -54,9 +55,9 @@ export class UserController {
       }),
     )
     file: Express.Multer.File,
-  ) {
-    const url = await this.userService.profilImage(file, user);
-    return { message: 'Done', data: { url } };
+  ): Promise<IResponse<ProfileResponse>> {
+    const profile = await this.userService.profilImage(file, user);
+    return successResponse <ProfileResponse>({data: {profile}});
   }
 
   // @UseInterceptors(

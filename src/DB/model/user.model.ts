@@ -7,7 +7,7 @@ import {
 } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 import { GenderEnum, LanguageEnum, ProviderEnum, RoleEnum } from 'src/common/enums';
-import {generateHash} from 'src/common';
+import {generateHash, IUser} from 'src/common';
 import { OtpDocument } from './otp.model';
 
 @Schema({
@@ -15,7 +15,7 @@ import { OtpDocument } from './otp.model';
   toObject: { virtuals: true },
   toJSON: { virtuals: true },
 })
-export class User {
+export class User implements IUser {
   @Prop({
     type: String,
     required: true,

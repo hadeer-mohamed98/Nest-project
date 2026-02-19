@@ -8,7 +8,6 @@ import {
 } from '@nestjs/common';
 import {
   createNumericalOtp,
-  generateHash,
   IUser,
   LoginCredentialsResponse,
   OtpEnum,
